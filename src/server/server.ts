@@ -42,6 +42,7 @@ type BaseServerOptions<E extends Env = Env> = {
   ERROR: Record<string, ErrorFile>
   MIDDLEWARE: Record<string, MiddlewareFile>
   root: string
+  projectRoot: string
   app?: Hono<E>
   init?: InitFunction<E>
   /**
@@ -233,6 +234,8 @@ export const createApp = <E extends Env>(options: BaseServerOptions<E>): Hono<E>
         rootPath = /\/$/.test(rootPath) ? rootPath : rootPath + '/'
       }
       app.route(rootPath, subApp)
+      // 独自変更: 末尾の `/` を許容する
+      app.route(rootPath + '/', subApp)
     }
   }
 
